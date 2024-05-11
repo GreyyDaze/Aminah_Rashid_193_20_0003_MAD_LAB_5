@@ -1,14 +1,12 @@
+package com.example.lab5task
+
 import android.content.ContentProvider
 import android.content.ContentUris
 import android.content.ContentValues
-import android.content.Context
 import android.content.UriMatcher
 import android.database.Cursor
 import android.database.MatrixCursor
 import android.net.Uri
-import com.example.lab5task.Joke
-import com.example.lab5task.JokeDao
-import com.example.lab5task.JokeDatabase
 import kotlinx.coroutines.*
 
 class JokeContentProvider : ContentProvider() {
@@ -54,7 +52,7 @@ class JokeContentProvider : ContentProvider() {
         selection: String?,
         selectionArgs: Array<out String>?,
         sortOrder: String?
-    ): Cursor? {
+    ): Cursor {
         val deferred = CoroutineScope(Dispatchers.IO).async {
             val cursor = MatrixCursor(arrayOf("_id", "jokeText")) // Define the columns for the cursor
             val jokes = jokeDao.getAllJokes() // Get the list of jokes from the database

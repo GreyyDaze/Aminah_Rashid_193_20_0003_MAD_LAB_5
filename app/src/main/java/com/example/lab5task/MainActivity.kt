@@ -150,9 +150,9 @@ fun MainUI() {
                 onClick = {
                     CoroutineScope(Dispatchers.IO).launch {
                         insertJoke(joke.value, context)
-                        // Display toast message based on the result
-                        Toast.makeText(context, "Joke inserted successfully", Toast.LENGTH_SHORT).show()
                     }
+                    // Display toast message based on the result
+                    Toast.makeText(context, "Joke inserted successfully", Toast.LENGTH_SHORT).show()
                 },
                 modifier = Modifier.fillMaxWidth(),
                 colors = ButtonDefaults.buttonColors(containerColor = Color.Black)
@@ -165,12 +165,19 @@ fun MainUI() {
             // Button for deleting joke (red color)
             Button(
                 onClick = {
+                    val (jokeId, _) = extractJokeInfo(joke.value)
                     CoroutineScope(Dispatchers.IO).launch {
-                        val (jokeId, _) = extractJokeInfo(joke.value)
                         if (jokeId != null) {
                             deleteJoke(jokeId, context)
                             // Display toast message based on the result
-                            Toast.makeText(context, "Joke deleted successfully", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, "Joke deleted successfully", Toast.LENGTH_SHORT)
+                                .show()
+                        }
+                    }
+                    CoroutineScope(Dispatchers.Main).launch {
+                        if (jokeId != null) {
+                            Toast.makeText(context, "Joke deleted successfully", Toast.LENGTH_SHORT)
+                                .show()
                         }
                     }
                 },
@@ -185,11 +192,17 @@ fun MainUI() {
             // Button for updating joke (yellow color)
             Button(
                 onClick = {
+                    val (jokeId, jokeText) = extractJokeInfo(joke.value)
                     CoroutineScope(Dispatchers.IO).launch {
-                        val (jokeId, jokeText) = extractJokeInfo(joke.value)
                         if (jokeId != null && jokeText != null) {
                             updateJoke(jokeId, jokeText, context)
                             // Display toast message based on the result
+                            Toast.makeText(context, "Joke updated successfully", Toast.LENGTH_SHORT)
+                                .show()
+                        }
+                    }
+                    CoroutineScope(Dispatchers.Main).launch {
+                        if (jokeId != null && jokeText != null) {
                             Toast.makeText(context, "Joke updated successfully", Toast.LENGTH_SHORT)
                                 .show()
                         }
